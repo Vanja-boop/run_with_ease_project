@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Run With Ease – Errand Services</title>
+  <style>
+    :root{
+      --bg:#0f1724; /* deep navy */
+      --card:#0b1220;
+      --accent:#ffcc00;
+      --muted:#94a3b8;
+      --glass: rgba(255,255,255,0.04);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family:Inter, system-ui, -apple-system, Arial, sans-serif; background:linear-gradient(180deg,#071023 0%, #071826 100%); color:#e6eef8;
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+    }
+    header{display:flex;align-items:center;gap:16px;padding:18px 20px;background:linear-gradient(90deg,var(--card),#071026);position:sticky;top:0;z-index:50}
+    .logo{display:flex;align-items:center;gap:12px}
+    .logo img{width:56px;height:56px;border-radius:999px;object-fit:cover;box-shadow:0 6px 18px rgba(0,0,0,0.6)}
+    .brand h1{margin:0;font-size:18px;letter-spacing:0.6px}
+    .brand p{margin:0;font-size:12px;color:var(--muted)}
+
+    nav{margin-left:auto}
+    .nav-links{display:flex;gap:14px}
+    .nav-links a{color:inherit;text-decoration:none;padding:8px 12px;border-radius:8px;font-weight:600}
+    .nav-links a:hover{background:var(--glass)}
+
+    /* Mobile nav */
+    .menu-btn{display:none;background:transparent;border:1px solid rgba(255,255,255,0.06);padding:8px;border-radius:8px}
+
+    main{padding:28px;max-width:1100px;margin:0 auto}
+    .hero{display:grid;grid-template-columns:1fr 380px;gap:24px;align-items:center}
+    .hero-card{background:linear-gradient(180deg, rgba(255,255,255,0.03), transparent);padding:26px;border-radius:12px;box-shadow:0 8px 30px rgba(2,6,23,0.6)}
+    .hero h2{margin:0 0 8px;font-size:28px}
+    .hero p{margin:0 0 16px;color:var(--muted)}
+    .cta{display:inline-block;background:var(--accent);color:#061024;padding:10px 14px;border-radius:10px;font-weight:700;text-decoration:none}
+
+    /* Services grid */
+    .services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:22px}
+    .service{background:rgba(255,255,255,0.02);padding:16px;border-radius:12px;transition:transform .28s ease, box-shadow .28s ease}
+    .service:hover{transform:translateY(-6px);box-shadow:0 18px 48px rgba(2,6,23,0.6)}
+    .service h3{margin:0 0 6px}
+    .price{font-weight:800;color:var(--accent)}
+
+    /* Booking form */
+    .booking{background:linear-gradient(180deg,#071826 0%, #071a2a 100%);padding:16px;border-radius:12px}
+    .form-row{display:flex;gap:10px}
+    .form-row .col{flex:1}
+    input,select,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit}
+    button.primary{background:var(--accent);color:#061024;border:none;padding:10px 12px;border-radius:10px;font-weight:700;cursor:pointer}
+    .muted{color:var(--muted);font-size:13px}
+
+    /* Booking list */
+    .bookings-list{margin-top:12px}
+    .booking-item{padding:10px;border-radius:8px;background:rgba(255,255,255,0.02);margin-bottom:8px}
+
+    /* Map + contact */
+    .map{height:220px;border-radius:12px;overflow:hidden;margin-top:12px;border:1px solid rgba(255,255,255,0.04)}
+
+    footer{padding:22px;text-align:center;color:var(--muted);margin-top:28px}
+
+    /* Animations */
+    @keyframes float {0%{transform:translateY(0)}50%{transform:translateY(-6px)}100%{transform:translateY(0)}}
+    .float{animation:float 4s ease-in-out infinite}
+
+    /* Responsive */
+    @media(max-width:900px){
+      .hero{grid-template-columns:1fr}
+      nav{display:none}
+      .menu-btn{display:inline-block;margin-left:auto}
+    }
+    @media(max-width:520px){
+      .hero h2{font-size:22px}
+    }
+
+    /* Simple fade-in for pages */
+    .page{display:none;opacity:0;transform:translateY(6px);transition:opacity .28s ease, transform .28s ease}
+    .page.active{display:block;opacity:1;transform:none}
+
+    /* Pricing */
+    .pricing{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:14px}
+    .price-card{padding:14px;border-radius:10px;background:rgba(255,255,255,0.02);text-align:center}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="logo.png" alt="Run With Ease logo" />
+      <div class="brand">
+        <h1>Run With Ease</h1>
+        <p>Errand services made easy • GoGo Runners</p>
+      </div>
+    </div>
+
+    <button class="menu-btn" id="menuBtn" aria-label="Open menu">☰</button>
+
+    <nav id="mainNav">
+      <div class="nav-links">
+        <a href="#" data-page="home">Home</a>
+        <a href="#" data-page="services">Services</a>
+        <a href="#" data-page="booking">Booking</a>
+        <a href="#" data-page="about">About</a>
+        <a href="#" data-page="contact">Contact</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- HOME -->
+    <section id="home" class="page active">
+      <div class="hero-card hero">
+        <div>
+          <h2>Let us take care of it!</h2>
+          <p class="muted">Fast, reliable errand services — groceries, deliveries, payments and custom tasks. Available for new customers.</p>
+          <p style="margin-top:14px"><a class="cta" href="#" data-page="booking">Book Now</a></p>
+
+          <div class="services-grid">
+            <div class="service float">
+              <h3>Grocery Shopping</h3>
+              <p class="muted">We shop and deliver your groceries on time.</p>
+              <p class="price">From KES 300</p>
+            </div>
+            <div class="service">
+              <h3>Task Errands</h3>
+              <p class="muted">Payments, pickups, small tasks handled professionally.</p>
+              <p class="price">From KES 200</p>
+            </div>
+            <div class="service">
+              <h3>Parcel Delivery</h3>
+              <p class="muted">Local parcel drop-offs and secure transfers.</p>
+              <p class="price">From KES 250</p>
+            </div>
+            <div class="service">
+              <h3>Custom Requests</h3>
+              <p class="muted">Tell us what you need — we'll make it happen.</p>
+              <p class="price">Custom pricing</p>
+            </div>
+          </div>
+        </div>
+
+        <aside style="padding:8px">
+          <div style="background:linear-gradient(180deg,#072331, #061624);padding:14px;border-radius:10px">
+            <h3 style="margin:0 0 6px">Quick Contact</h3>
+            <p style="margin:0 0 8px;font-weight:700">Call / Text: <span style="color:var(--accent)">0715 869 194</span></p>
+            <p class="muted" style="margin:0 0 10px">Available 7am–8pm • Serving Nairobi (expandable)</p>
+            <a class="cta" href="#" data-page="contact">Contact</a>
+          </p>
+          </div>
+
+          <div style="margin-top:12px;background:rgba(255,255,255,0.02);padding:12px;border-radius:10px">
+            <h4 style="margin:0 0 8px">Popular Packages</h4>
+            <div class="pricing">
+              <div class="price-card"><strong>Quick Shop</strong><div class="muted">Up to 10 items</div><div style="margin-top:8px;font-weight:800;color:var(--accent)">KES 350</div></div>
+              <div class="price-card"><strong>Standard Errand</strong><div class="muted">1–3 tasks</div><div style="margin-top:8px;font-weight:800;color:var(--accent)">KES 500</div></div>
+              <div class="price-card"><strong>Express Delivery</strong><div class="muted">Within 2 hours</div><div style="margin-top:8px;font-weight:800;color:var(--accent)">KES 700</div></div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section id="services" class="page">
+      <h2>Our Services</h2>
+      <p class="muted">We offer a wide range of errand services — choose what fits you.</p>
+
+      <div style="margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="hero-card">
+          <h3>Grocery Shopping</h3>
+          <p class="muted">Provide your list and preferred brands; we shop and deliver with care.</p>
+          <ul class="muted">
+            <li>Fresh produce selection</li>
+            <li>Brand-specific requests</li>
+            <li>Contactless delivery</li>
+          </ul>
+        </div>
+        <div class="hero-card">
+          <h3>Task Errands</h3>
+          <p class="muted">Bills, submissions, pickups, and other one-off tasks.</p>
+          <ul class="muted"><li>Prompt pickups</li><li>Secure handling</li><li>Proof of completion</li></ul>
+        </div>
+      </div>
+
+      <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="hero-card">
+          <h3>Parcel Delivery</h3>
+          <p class="muted">Door-to-door local parcel delivery with tracking updates.</p>
+        </div>
+        <div class="hero-card">
+          <h3>Custom Requests</h3>
+          <p class="muted">If it's legal and reasonable, we can try it — tell us what you need.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- BOOKING -->
+    <section id="booking" class="page">
+      <h2>Book an Errand</h2>
+      <div style="display:grid;grid-template-columns:1fr 380px;gap:16px;margin-top:12px">
+        <div class="booking">
+          <form id="bookingForm">
+            <div class="form-row">
+              <div class="col"><label>Name<br><input id="name" type="text" required placeholder="Your full name"></label></div>
+              <div class="col"><label>Phone<br><input id="phone" type="tel" required placeholder="07XX XXX XXX"></label></div>
+            </div>
+            <div style="margin-top:10px">
+              <label>Service<br>
+                <select id="serviceType">
+                  <option>Grocery Shopping</option>
+                  <option>Task Errands</option>
+                  <option>Parcel Delivery</option>
+                  <option>Custom Request</option>
+                </select>
+              </label>
+            </div>
+            <div style="margin-top:10px">
+              <label>Details<br><textarea id="details" rows="4" placeholder="Tell us where to go, items, preferred times..." required></textarea></label>
+            </div>
+            <div style="margin-top:10px;display:flex;gap:8px;align-items:center">
+              <button class="primary" type="submit">Submit Booking</button>
+              <div class="muted">We will contact you to confirm timing & fees.</div>
+            </div>
+          </form>
+
+          <div class="bookings-list" id="bookingsList" aria-live="polite"></div>
+        </div>
+
+        <aside>
+          <div class="hero-card">
+            <h3>Contact</h3>
+            <p class="muted">Call / Text: <strong style="color:var(--accent)">0715 869 194</strong></p>
+            <p class="muted">Email: runwithease@gogo.com</p>
+            <div class="map" id="mapPlaceholder">
+              <!-- Replace with real embed when ready -->
+              <iframe src="https://maps.google.com/maps?q=Nairobi&t=&z=13&ie=UTF8&iwloc=&output=embed" style="border:0;width:100%;height:100%" aria-hidden="false"></iframe>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="page">
+      <h2>About Run With Ease</h2>
+      <div class="hero-card" style="margin-top:12px">
+        <p class="muted">Run With Ease (GoGo Runners) is a local errand service focused on reliability, transparency, and care. Founded to help busy people and small businesses, we offer flexible packages and ad-hoc services. Our runners are background-checked and trained for customer care.</p>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="page">
+      <h2>Contact & Hours</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px">
+        <div class="hero-card">
+          <h3>Get in touch</h3>
+          <p class="muted">Phone: <strong style="color:var(--accent)">0715 869 194</strong><br>Email: runwithease@gogo.com</p>
+        </div>
+        <div class="hero-card">
+          <h3>Hours</h3>
+          <p class="muted">Daily 07:00 — 20:00</p>
+          <h4>Service Area</h4>
+          <p class="muted">Nairobi (expandable on request)</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div>&copy; 2025 Run With Ease • GoGo Runners — Built for small businesses</div>
+  </footer>
+
+  <script>
+    // Simple page router
+    const pages = document.querySelectorAll('.page');
+    function show(pageId){
+      pages.forEach(p=>{p.classList.remove('active')});
+      const el = document.getElementById(pageId);
+      if(el) el.classList.add('active');
+      window.scrollTo({top:0, behavior:'smooth'});
+    }
+
+    // wire nav links
+    document.querySelectorAll('[data-page]').forEach(a=>{
+      a.addEventListener('click', (e)=>{e.preventDefault(); const p=a.getAttribute('data-page'); show(p)})
+    })
+
+    // mobile menu toggle
+    const menuBtn = document.getElementById('menuBtn');
+    const mainNav = document.getElementById('mainNav');
+    menuBtn.addEventListener('click', ()=>{
+      if(mainNav.style.display==='block') mainNav.style.display=''; else mainNav.style.display='block';
+    })
+
+    // Booking storage (local only)
+    const bookingForm = document.getElementById('bookingForm');
+    const bookingsList = document.getElementById('bookingsList');
+
+    function loadBookings(){
+      const b = JSON.parse(localStorage.getItem('rwe_bookings')||'[]');
+      bookingsList.innerHTML='';
+      if(b.length===0){ bookingsList.innerHTML='<div class="muted">No bookings yet.</div>'; return }
+      b.forEach((it,idx)=>{
+        const div = document.createElement('div'); div.className='booking-item';
+        div.innerHTML = `<strong>${it.name}</strong> — ${it.service} <div class="muted">${it.phone} • ${new Date(it.ts).toLocaleString()}</div><div style="margin-top:6px">${escapeHtml(it.details)}</div>`;
+        bookingsList.appendChild(div);
+      })
+    }
+
+    function escapeHtml(s){ return String(s).replace(/[&<>"']/g, (c)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[c])) }
+
+    bookingForm.addEventListener('submit',(e)=>{
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const service = document.getElementById('serviceType').value;
+      const details = document.getElementById('details').value.trim();
+      if(!name||!phone||!details){ alert('Please complete all fields'); return }
+      const payload = {name,phone,service,details,ts:Date.now()};
+      const all = JSON.parse(localStorage.getItem('rwe_bookings')||'[]');
+      all.unshift(payload); localStorage.setItem('rwe_bookings', JSON.stringify(all));
+      loadBookings();
+      bookingForm.reset();
+      alert('Booking saved locally. We will contact you to confirm.');
+      show('home');
+    })
+
+    // init
+    loadBookings();
+
+  </script>
+</body>
+</html>
